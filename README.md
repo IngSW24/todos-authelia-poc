@@ -1,3 +1,5 @@
+*Disclaimer: Page still being updated*
+
 # Hosting an Authentication Service with Nginx and Authelia using Docker Compose
 
 This guide explains how to set up an authentication service using **Nginx Proxy Manager (NPM)**, **Authelia**, and **Docker Compose**, along with a React web app frontend and a NestJS REST API backend. The setup is designed for small-scale hosting on an AWS EC2 instance.
