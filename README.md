@@ -32,7 +32,7 @@ The `docker-compose.yml` file will define the services for this setup:
 - **Redis:** Stores sessions for Authelia.
 - **React App & NestJS API:** Serve as example applications.
 
-You can find the full `docker-compose.yml` file in [this GitHub repository](https://github.com/your-repo-link).
+You can find the full `docker-compose.yml` file in [this GitHub repository](https://github.com/IngSW24/todos-authelia-poc/blob/main/docker-compose.yml).
 
 #### Key Points:
 - The `frontend` and `backend` networks ensure isolated communication between services.
@@ -54,7 +54,7 @@ Initially, Authelia will fail because it lacks a configuration file. This is exp
 ### **3. Configure Authelia**
 
 Edit the Authelia configuration file located in `./authelia/config/configuration.yml`.
-You can find the full `configuration.yml` file in [this GitHub repository](https://github.com/your-repo-link).
+You can find the full `configuration.yml` file in [this GitHub repository](https://github.com/IngSW24/todos-authelia-poc/blob/main/authelia-configuration.yml).
 
 #### Key Configuration Points:
 
@@ -72,8 +72,10 @@ Log in using the default credentials (admin@example.com / changeme) and create a
 
 Add Proxy Hosts:
 
-- React App: Redirect traffic to http://my-app:3000
-- NestJS API: Redirect traffic to http://nestjs:3000
+- `your-domain.com` : Redirect traffic to `http://my-app:3000`
+  - Add [following configuration](https://github.com/IngSW24/todos-authelia-poc/blob/main/your-domain-nginx-snippet.txt) on advance settings tab
+- `your-domain.com/api` : Redirect traffic to `http://nestjs:3000`
+  - Add [following configuration](https://github.com/IngSW24/todos-authelia-poc/blob/main/auth-your-domain-nginx-snippet.txt) on advance settings tab
 
 Add SSL certificates for your domain using the integrated Let's Encrypt option.
 
