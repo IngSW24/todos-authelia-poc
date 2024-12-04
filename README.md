@@ -66,11 +66,16 @@ You can find the full `configuration.yml` file in [this GitHub repository](https
 
 ### **3. Set Up Proxy Hosts with SSL**
 
-- Open NPM's admin interface (http://<`your-domain.com`>:81).
-- Add the following hosts:
-  - auth.your-domain.com (Authelia)
-  - your-domain.com (React frontend and NestJS API)
-- Generate Let's Encrypt SSL certificates for each domain.
+Access the NPM admin panel via: http://<`your-server-ip`>:81
+
+Log in using the default credentials (admin@example.com / changeme) and create an admin account.
+
+Add Proxy Hosts:
+
+- React App: Redirect traffic to http://my-app:3000
+- NestJS API: Redirect traffic to http://nestjs:3000
+
+Add SSL certificates for your domain using the integrated Let's Encrypt option.
 
 ---
 
