@@ -1,0 +1,96 @@
+version: '3'
+
+networks:
+  frontend:
+    external: true
+  backend:
+
+services:
+  npm-app:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: nginx-app
+    depends_on:
+      - npm-db
+    restart: always
+    ports:
+      - "80:80"
+      - "81:81"
+      - "443:443"
+    environment:
+      - DB_MYSQL_HOST=npm-db
+      - DB_MYSQL_PORT=3306
+      - DB_MYSQL_USER=npm
+      - DB_MYSQL_PASSWORD=MYSQLPASSWORD
+      - DB_MYSQL_NAME=npm
+    volumes:
+      - ./data:/data
+      - ./ssl:/etc/letsencrypt
+    networks:
+      - frontend
+      - backend
+
+  npm-db:
+    image: jc21/mariadb-aria:latest
+    restart: always
+    container_name: nginx-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=ROOTMYSQLPASSWORD
+      - MYSQL_DATABASE=npm
+      - MYSQL_USER=npm
+      - MYSQL_PASSWORD=MYSQLPASSWORD
+    volumes:
+      - ./db:/var/lib/mysql
+    networks:
+      - backend
+
+  my-app:
+    image: my-app
+    build:
+      context: ./my-app/
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
+    networks:
+      - frontend
+
+  authelia:
+    image: authelia/authelia
+    container_name: authelia
+    volumes:
+      - ./authelia/config:/config
+    ports:
+      - 9091:9091
+    environment:
+      - TZ=Europe/Rome
+    depends_on:
+      - redis
+    networks:
+      - backend
+      - frontend
+
+  redis:
+    container_name: authelia-redis
+    image: redis:alpine
+    volumes:
+      - ./authelia/redis:/data
+    ports:
+      - 6378:6379
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Rome
+    networks:
+      - backend
+
+  nestjs:
+    image: nestjs
+    build:
+      context: ./nestjs/
+      dockerfile: ./Dockerfile
+    ports:
+      - 3001:3000
+    environment:
+      - NODE_ENV=production
+    networks:
+      - frontend
